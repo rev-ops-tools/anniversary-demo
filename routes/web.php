@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BenchmarkController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Laravel\Fortify\Features;
@@ -38,5 +39,9 @@ Route::get('ssr-demo', function () {
         ],
     ]);
 })->name('ssr-demo');
+
+Route::get('benchmark', [BenchmarkController::class, 'index'])->name('benchmark');
+Route::get('benchmark/ping', [BenchmarkController::class, 'ping'])->name('benchmark.ping');
+Route::post('benchmark/runs', [BenchmarkController::class, 'store'])->name('benchmark.store');
 
 require __DIR__.'/settings.php';
