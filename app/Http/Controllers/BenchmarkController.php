@@ -35,7 +35,7 @@ class BenchmarkController extends Controller
             'runs' => $runs,
             'latestOctane' => $latestOctane,
             'latestStandard' => $latestStandard,
-            'octaneRunning' => isset($_ENV['LARAVEL_OCTANE']) && $_ENV['LARAVEL_OCTANE'],
+            'octaneRunning' => php_sapi_name() === 'frankenphp',
         ]);
     }
 
@@ -58,11 +58,9 @@ class BenchmarkController extends Controller
 
         $elapsed = (hrtime(true) - $start) / 1e6;
 
-        $octaneRunning = isset($_ENV['LARAVEL_OCTANE']) && $_ENV['LARAVEL_OCTANE'];
-
         return response()->json([
             'elapsed_ms' => round($elapsed, 3),
-            'octane' => $octaneRunning,
+            'octane' => php_sapi_name() === 'frankenphp',
         ]);
     }
 
@@ -71,11 +69,9 @@ class BenchmarkController extends Controller
      */
     public function store(StoreBenchmarkRunRequest $request): RedirectResponse
     {
-        $octaneRunning = isset($_ENV['LARAVEL_OCTANE']) && $_ENV['LARAVEL_OCTANE'];
-
         BenchmarkRun::query()->create([
             ...$request->validated(),
-            'run_type' => $octaneRunning ? 'octane' : 'standard',
+            'run_type' => php_sapi_name() === 'frankenphp' ? 'octane' : 'standard',
         ]);
 
         return to_route('benchmark');
