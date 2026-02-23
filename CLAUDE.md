@@ -11,6 +11,7 @@ This application is a Laravel application and its main Laravel ecosystems packag
 
 - php - 8.4.18
 - inertiajs/inertia-laravel (INERTIA_LARAVEL) - v2
+- laravel/fortify (FORTIFY) - v1
 - laravel/framework (LARAVEL) - v12
 - laravel/nightwatch (NIGHTWATCH) - v1
 - laravel/octane (OCTANE) - v2
@@ -20,16 +21,14 @@ This application is a Laravel application and its main Laravel ecosystems packag
 - laravel/wayfinder (WAYFINDER) - v0
 - laravel/boost (BOOST) - v2
 - laravel/mcp (MCP) - v0
-- laravel/pail (PAIL) - v1
 - laravel/pint (PINT) - v1
-- laravel/sail (SAIL) - v1
 - pestphp/pest (PEST) - v4
 - phpunit/phpunit (PHPUNIT) - v12
 - @inertiajs/react (INERTIA_REACT) - v2
 - react (REACT) - v19
 - tailwindcss (TAILWINDCSS) - v4
 - @laravel/vite-plugin-wayfinder (WAYFINDER_VITE) - v0
-- eslint (ESLINT) - v9
+- eslint (ESLINT) - v10
 - laravel-echo (ECHO) - v2
 - prettier (PRETTIER) - v3
 
@@ -41,6 +40,7 @@ This project has domain-specific skills available. You MUST activate the relevan
 - `pest-testing` — Tests applications using the Pest 4 PHP framework. Activates when writing tests, creating unit or feature tests, adding assertions, testing Livewire components, browser testing, debugging test failures, working with datasets or mocking; or when the user mentions test, spec, TDD, expects, assertion, coverage, or needs to verify functionality works.
 - `inertia-react-development` — Develops Inertia.js v2 React client-side applications. Activates when creating React pages, forms, or navigation; using &lt;Link&gt;, &lt;Form&gt;, useForm, or router; working with deferred props, prefetching, or polling; or when user mentions React with Inertia, React pages, React forms, or React navigation.
 - `tailwindcss-development` — Styles applications using Tailwind CSS v4 utilities. Activates when adding styles, restyling components, working with gradients, spacing, layout, flex, grid, responsive design, dark mode, colors, typography, or borders; or when the user mentions CSS, styling, classes, Tailwind, restyle, hero section, cards, buttons, or any visual/UI changes.
+- `developing-with-fortify` — Laravel Fortify headless authentication backend development. Activate when implementing authentication features including login, registration, password reset, email verification, two-factor authentication (2FA/TOTP), profile updates, headless auth, authentication scaffolding, or auth guards in Laravel applications.
 
 ## Conventions
 
@@ -152,6 +152,13 @@ protected function isAccessible(User $user, ?string $path = null): bool
 
 - The application is served by Laravel Herd and will be available at: `https?://[kebab-case-project-dir].test`. Use the `get-absolute-url` tool to generate valid URLs for the user.
 - You must not run any commands to make the site available via HTTP(S). It is always available through Laravel Herd.
+
+=== tests rules ===
+
+# Test Enforcement
+
+- Every change must be programmatically tested. Write a new test or update an existing test, then run the affected tests to make sure they pass.
+- Run the minimum number of tests needed to ensure code quality and speed. Use `php artisan test --compact` with a specific filename or filter.
 
 === inertia-laravel/v2 rules ===
 
@@ -290,5 +297,13 @@ Wayfinder generates TypeScript functions for Laravel routes. Import from `@/acti
 - Always use existing Tailwind conventions; check project patterns before adding new ones.
 - IMPORTANT: Always use `search-docs` tool for version-specific Tailwind CSS documentation and updated code examples. Never rely on training data.
 - IMPORTANT: Activate `tailwindcss-development` every time you're working with a Tailwind CSS or styling-related task.
+
+=== laravel/fortify rules ===
+
+# Laravel Fortify
+
+- Fortify is a headless authentication backend that provides authentication routes and controllers for Laravel applications.
+- IMPORTANT: Always use the `search-docs` tool for detailed Laravel Fortify patterns and documentation.
+- IMPORTANT: Activate `developing-with-fortify` skill when working with Fortify authentication features.
 
 </laravel-boost-guidelines>

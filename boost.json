@@ -7,11 +7,15 @@
     "herd_mcp": true,
     "mcp": true,
     "nightwatch_mcp": true,
+    "packages": [
+        "laravel/fortify"
+    ],
     "sail": false,
     "skills": [
         "wayfinder-development",
         "pest-testing",
         "inertia-react-development",
-        "tailwindcss-development"
+        "tailwindcss-development",
+        "developing-with-fortify"
     ]
 }
