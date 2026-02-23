@@ -5,6 +5,7 @@ import { createRoot } from 'react-dom/client';
 import '../css/app.css';
 import { initializeTheme } from './hooks/use-appearance';
 import { configureEcho } from '@laravel/echo-react';
+import './lib/axios';
 
 configureEcho({
     broadcaster: 'reverb',
