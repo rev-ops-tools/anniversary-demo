@@ -22,7 +22,6 @@ class StoreBenchmarkRunRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'run_type' => ['required', 'string', 'in:octane,standard'],
             'request_count' => ['required', 'integer', 'min:1', 'max:500'],
             'avg_ms' => ['required', 'numeric', 'min:0'],
             'min_ms' => ['required', 'numeric', 'min:0'],

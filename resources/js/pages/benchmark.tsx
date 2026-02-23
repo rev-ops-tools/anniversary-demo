@@ -18,6 +18,7 @@ interface BenchmarkProps {
     runs: BenchmarkRunData[];
     latestOctane: BenchmarkRunData | null;
     latestStandard: BenchmarkRunData | null;
+    octaneRunning: boolean;
 }
 
 function formatMs(ms: number): string {
@@ -75,9 +76,8 @@ function StatCard({
     );
 }
 
-export default function Benchmark({ runs, latestOctane, latestStandard }: BenchmarkProps) {
+export default function Benchmark({ runs, latestOctane, latestStandard, octaneRunning }: BenchmarkProps) {
     const [requestCount, setRequestCount] = useState(100);
-    const [runType, setRunType] = useState<'octane' | 'standard'>('octane');
     const [isRunning, setIsRunning] = useState(false);
     const [progress, setProgress] = useState(0);
     const [liveStats, setLiveStats] = useState<{ avg: number; min: number; max: number; count: number } | null>(null);
@@ -128,7 +128,6 @@ export default function Benchmark({ runs, latestOctane, latestStandard }: Benchm
         router.post(
             '/benchmark/runs',
             {
-                run_type: runType,
                 request_count: valid.length,
                 avg_ms: Number(avg.toFixed(3)),
                 min_ms: Number(sorted[0].toFixed(3)),
@@ -145,7 +144,7 @@ export default function Benchmark({ runs, latestOctane, latestStandard }: Benchm
                 },
             },
         );
-    }, [requestCount, runType]);
+    }, [requestCount]);
 
     return (
         <>
@@ -168,22 +167,24 @@ export default function Benchmark({ runs, latestOctane, latestStandard }: Benchm
                 {/* Controls */}
                 <section className="mx-auto max-w-5xl px-6 pb-12">
                     <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+                        <div className="mb-4 flex items-center gap-3">
+                            <span
+                                className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-sm font-semibold ${
+                                    octaneRunning
+                                        ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-400'
+                                        : 'bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-400'
+                                }`}
+                            >
+                                <span className={`inline-block size-2 rounded-full ${octaneRunning ? 'bg-emerald-500' : 'bg-amber-500'}`} />
+                                {octaneRunning ? 'Octane Active' : 'Standard PHP'}
+                            </span>
+                            <span className="text-sm text-gray-500 dark:text-gray-400">
+                                {octaneRunning
+                                    ? 'This deployment is running with Laravel Octane'
+                                    : 'This deployment is running without Octane'}
+                            </span>
+                        </div>
                         <div className="flex flex-wrap items-end gap-4">
-                            <div>
-                                <label htmlFor="runType" className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
-                                    Deployment Type
-                                </label>
-                                <select
-                                    id="runType"
-                                    value={runType}
-                                    onChange={(e) => setRunType(e.target.value as 'octane' | 'standard')}
-                                    disabled={isRunning}
-                                    className="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-900 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-                                >
-                                    <option value="octane">Octane</option>
-                                    <option value="standard">Standard</option>
-                                </select>
-                            </div>
                             <div>
                                 <label htmlFor="requestCount" className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
                                     Requests
@@ -205,7 +206,7 @@ export default function Benchmark({ runs, latestOctane, latestStandard }: Benchm
                                 className={`rounded-lg px-6 py-2 text-sm font-semibold text-white shadow-md transition ${
                                     isRunning
                                         ? 'cursor-not-allowed bg-gray-400'
-                                        : runType === 'octane'
+                                        : octaneRunning
                                           ? 'bg-emerald-600 hover:bg-emerald-700'
                                           : 'bg-amber-600 hover:bg-amber-700'
                                 }`}
@@ -224,7 +225,7 @@ export default function Benchmark({ runs, latestOctane, latestStandard }: Benchm
                                 <div className="h-3 overflow-hidden rounded-full bg-gray-200 dark:bg-gray-700">
                                     <div
                                         className={`h-full rounded-full transition-all duration-200 ${
-                                            runType === 'octane' ? 'bg-emerald-500' : 'bg-amber-500'
+                                            octaneRunning ? 'bg-emerald-500' : 'bg-amber-500'
                                         }`}
                                         style={{ width: `${progress}%` }}
                                     />

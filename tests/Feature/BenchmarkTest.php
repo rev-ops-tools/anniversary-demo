@@ -3,13 +3,14 @@
 use App\Models\BenchmarkRun;
 use Inertia\Testing\AssertableInertia as Assert;
 
-test('ping endpoint returns elapsed_ms', function () {
+test('ping endpoint returns elapsed_ms and octane status', function () {
     $response = $this->getJson(route('benchmark.ping'));
 
     $response->assertOk()
-        ->assertJsonStructure(['elapsed_ms']);
+        ->assertJsonStructure(['elapsed_ms', 'octane']);
 
     expect($response->json('elapsed_ms'))->toBeFloat();
+    expect($response->json('octane'))->toBeBool();
 });
 
 test('index page renders with props', function () {
@@ -24,12 +25,12 @@ test('index page renders with props', function () {
             ->has('runs')
             ->has('latestOctane')
             ->has('latestStandard')
+            ->has('octaneRunning')
         );
 });
 
-test('store endpoint creates a benchmark run', function () {
+test('store endpoint creates a benchmark run with auto-detected run type', function () {
     $data = [
-        'run_type' => 'octane',
         'request_count' => 100,
         'avg_ms' => 2.5,
         'min_ms' => 1.0,
@@ -44,17 +45,16 @@ test('store endpoint creates a benchmark run', function () {
     $response->assertRedirect(route('benchmark'));
 
     $this->assertDatabaseHas('benchmark_runs', [
-        'run_type' => 'octane',
+        'run_type' => 'standard',
         'request_count' => 100,
     ]);
 });
 
-test('store validation rejects invalid data', function () {
+test('store validation rejects bad data', function () {
     $response = $this->post(route('benchmark.store'), [
-        'run_type' => 'invalid',
         'request_count' => 1000,
         'avg_ms' => -1,
     ]);
 
-    $response->assertSessionHasErrors(['run_type', 'request_count', 'avg_ms']);
+    $response->assertSessionHasErrors(['request_count', 'avg_ms']);
 });
